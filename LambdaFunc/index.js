@@ -45,7 +45,7 @@ const handlers = {
 
         let inputPhrase;
         let targetLan;
-        
+
         if (input && input.value) {
             inputPhrase = input.value.toLowerCase();
         }
@@ -58,22 +58,27 @@ const handlers = {
         //const prompt = myPrompts[itemName];
 
         const lanCode = langCodes[targetLan];
-        
-        rapid.call('GoogleTranslate', 'translateAutomatic', { 
+
+        rapid.call('GoogleTranslate', 'translateAutomatic', {
         	'apiKey': 'AIzaSyAfqcbjvhcMMXsN4S8DzXwBXfD8YyuPQjI',
         	'string': inputPhrase,
         	'targetLanguage': lanCode,
-         
+
         }).on('success', (payload)=>{
             process.stdout.write("translated");
             callback({},
-            buildSpeechletResponse('Translate Demo', `${inputPhrase} in ${targetLan} is ${payload}`, null, false));
+            this.attributes.speechOutput = payload;
+            this.attributes.repromptSpeech = "What else can I help with?";
+            this.emit(':tell', this.attributes.speechOutput, this.attributes.repromptSpeech);
         }).on('error', (payload)=>{
             process.stdout.write("not translated");
             callback({},
-            buildSpeechletResponse('Translate Demo', `Sorry, translation not available`, null, false));
+            this.attributes.speechOutput = "Can you say it again?";
+            this.attributes.repromptSpeech = "What else can I help?"
+            this.emit(':ask', this.attributes.speechOutput, this.attributes.repromptSpeech);
+            );
         });
-        
+
         if (inputPhrase) {
             this.attributes.speechOutput = inputPhrase;
             this.attributes.repromptSpeech = this.t('RECIPE_REPEAT_MESSAGE');
