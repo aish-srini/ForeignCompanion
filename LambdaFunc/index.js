@@ -24,25 +24,31 @@ const handlers = {
         this.emit(':ask', this.attributes.speechOutput, this.attributes.repromptSpeech);
     },
     'RecipeIntent': function () {
+        const input = this.event.request.intent.slots.Phrase;
+        const target = this.event.request.intent.slots.Language;
         const itemSlot = this.event.request.intent.slots.Item;
-        let itemName;
-        if (itemSlot && itemSlot.value) {
-            itemName = itemSlot.value.toLowerCase();
+        let inputPhrase;
+        let targetLan;
+        if (input && input.value) {
+            inputPhrase = input.value.toLowerCase();
+        }
+        if (target && target.value) {
+            targetLan = target.value.toLowerCase();
         }
 
-        const cardTitle = this.t('DISPLAY_CARD_TITLE', this.t('SKILL_NAME'), itemName);
-        const myPrompts = this.t('PROMPTS');
-        const prompt = myPrompts[itemName];
+        const cardTitle = this.t('DISPLAY_CARD_TITLE', this.t('SKILL_NAME'), inputPhrase);
+        //const myPrompts = this.t('PROMPTS');
+        //const prompt = myPrompts[itemName];
 
-        if (prompt) {
-            this.attributes.speechOutput = prompt;
+        if (inputPhrase) {
+            this.attributes.speechOutput = inputPhrase;
             this.attributes.repromptSpeech = this.t('RECIPE_REPEAT_MESSAGE');
-            this.emit(':askWithCard', prompt, this.attributes.repromptSpeech, cardTitle, prompt);
+            this.emit(':askWithCard', inputPhrase, this.attributes.repromptSpeech, cardTitle, inputPhrase);
         } else {
             let speechOutput = this.t('RECIPE_NOT_FOUND_MESSAGE');
             const repromptSpeech = this.t('RECIPE_NOT_FOUND_REPROMPT');
-            if (itemName) {
-                speechOutput += this.t('RECIPE_NOT_FOUND_WITH_ITEM_NAME', itemName);
+            if (inputPhrase) {
+                speechOutput += this.t('RECIPE_NOT_FOUND_WITH_ITEM_NAME', inputPhrase);
             } else {
                 speechOutput += this.t('RECIPE_NOT_FOUND_WITHOUT_ITEM_NAME');
             }
@@ -76,9 +82,8 @@ const handlers = {
 const languageStrings = {
     'en-GB': {
         translation: {
-            PROMPTS: prompts.PROMPTS_IN_ENGLISH,
-            SKILL_NAME: 'British Minecraft Helper',
-            WELCOME_MESSAGE: "Welcome to %s. You can ask a question like, what\'s the recipe for a chest? ... Now, what can I help you with.",
+            SKILL_NAME: 'Foreign Companion',
+            WELCOME_MESSAGE: "Welcome to %s. You can ask a question like, how do I say hello in Spanish ... Now, what can I help you with.",
             WELCOME_REPROMT: 'For instructions on what you can say, please say help me.',
             DISPLAY_CARD_TITLE: '%s  - Recipe for %s.',
             HELP_MESSAGE: "You can ask questions such as, what\'s the recipe, or, you can say exit...Now, what can I help you with?",
@@ -93,9 +98,8 @@ const languageStrings = {
     },
     'en-US': {
         translation: {
-            PROMPTS: prompts.PROMPTS_IN_ENGLISH,
-            SKILL_NAME: 'American Minecraft Helper',
-            WELCOME_MESSAGE: "Welcome to %s. You can ask a question like, what\'s the recipe for a chest? ... Now, what can I help you with.",
+            SKILL_NAME: 'Foreign Companion',
+            WELCOME_MESSAGE: "Welcome to %s. You can ask a question like, how do I say hello in Spanish ... Now, what can I help you with.",
             WELCOME_REPROMT: 'For instructions on what you can say, please say help me.',
             DISPLAY_CARD_TITLE: '%s  - Recipe for %s.',
             HELP_MESSAGE: "You can ask questions such as, what\'s the recipe, or, you can say exit...Now, what can I help you with?",
