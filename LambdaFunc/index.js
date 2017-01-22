@@ -11,7 +11,7 @@
 'use strict';
 
 const Alexa = require('alexa-sdk');
-const recipes = require('./prompts');
+const prompts = require('./prompts');
 
 const APP_ID = undefined; // TODO replace with your app ID (OPTIONAL).
 
