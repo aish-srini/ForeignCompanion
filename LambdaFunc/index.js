@@ -31,14 +31,14 @@ const handlers = {
         const target = this.event.request.intent.slots.Language;
 
         const langCodes = {
-        "German" : "de",
-        "Dutch" : "nl",
-        "English" : "en",
-        "French" : "fr",
-        "Italian" : "it",
-        "Polish" : "pl",
-        "Russian" : "ru",
-        "Spanish" : "es"
+        "german" : "de",
+        "dutch" : "nl",
+        "english" : "en",
+        "french" : "fr",
+        "italian" : "it",
+        "polish" : "pl",
+        "russian" : "ru",
+        "spanish" : "es"
         };
 
         process.stdout.write("TopicIntent is running");
