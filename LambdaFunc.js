@@ -31,13 +31,13 @@ const handlers = {
         }
 
         const cardTitle = this.t('DISPLAY_CARD_TITLE', this.t('SKILL_NAME'), itemName);
-        const myRecipes = this.t('RECIPES');
-        const recipe = myRecipes[itemName];
+        const myPrompts = this.t('PROMPTS');
+        const prompt = myPrompts[itemName];
 
-        if (recipe) {
-            this.attributes.speechOutput = recipe;
+        if (prompt) {
+            this.attributes.speechOutput = prompt;
             this.attributes.repromptSpeech = this.t('RECIPE_REPEAT_MESSAGE');
-            this.emit(':askWithCard', recipe, this.attributes.repromptSpeech, cardTitle, recipe);
+            this.emit(':askWithCard', prompt, this.attributes.repromptSpeech, cardTitle, prompt);
         } else {
             let speechOutput = this.t('RECIPE_NOT_FOUND_MESSAGE');
             const repromptSpeech = this.t('RECIPE_NOT_FOUND_REPROMPT');
@@ -76,8 +76,8 @@ const handlers = {
 const languageStrings = {
     'en-GB': {
         translation: {
-            RECIPES: recipes.RECIPE_EN_GB,
-            SKILL_NAME: 'British Minecraft Helper',
+            PROMPTS: prompts.PROMPTS_IN_ENGLISH,
+            SKILL_NAME: 'Foreign Companion',
             WELCOME_MESSAGE: "Welcome to %s. You can ask a question like, what\'s the recipe for a chest? ... Now, what can I help you with.",
             WELCOME_REPROMT: 'For instructions on what you can say, please say help me.',
             DISPLAY_CARD_TITLE: '%s  - Recipe for %s.',
@@ -93,7 +93,7 @@ const languageStrings = {
     },
     'en-US': {
         translation: {
-            RECIPES: recipes.RECIPE_EN_US,
+            PROMPTS: recipes.RECIPE_EN_US,
             SKILL_NAME: 'American Minecraft Helper',
             WELCOME_MESSAGE: "Welcome to %s. You can ask a question like, what\'s the recipe for a chest? ... Now, what can I help you with.",
             WELCOME_REPROMT: 'For instructions on what you can say, please say help me.',
@@ -110,7 +110,7 @@ const languageStrings = {
     },
     'de-DE': {
         translation: {
-            RECIPES: recipes.RECIPE_DE_DE,
+            PROMPTS: recipes.RECIPE_DE_DE,
             SKILL_NAME: 'Assistent für Minecraft in Deutsch',
             WELCOME_MESSAGE: 'Willkommen bei %s. Du kannst beispielsweise die Frage stellen: Welche Rezepte gibt es für eine Truhe? ... Nun, womit kann ich dir helfen?',
             WELCOME_REPROMT: 'Wenn du wissen möchtest, was du sagen kannst, sag einfach „Hilf mir“.',
