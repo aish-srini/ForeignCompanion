@@ -11,7 +11,7 @@
 'use strict';
 
 const Alexa = require('alexa-sdk');
-const lanCodes = require('./languages');
+//const lanCodes = require('./languages');
 const RapidAPI = require('./rapidapi-connect');
 const rapid = new RapidAPI("ForeignCompanion", "083e204f-70fe-4969-9c09-ade3f2057ae5");
 
@@ -24,10 +24,24 @@ const handlers = {
         // understood, they will be prompted again with this text.
         this.attributes.repromptSpeech = this.t('WELCOME_REPROMT');
         this.emit(':ask', this.attributes.speechOutput, this.attributes.repromptSpeech);
+        process.stdout.write("New session has begun");
     },
     'TopicIntent': function () {
         const input = this.event.request.intent.slots.Phrase;
         const target = this.event.request.intent.slots.Language;
+
+        const langCodes = {
+        "German" : "de",
+        "Dutch" : "nl",
+        "English" : "en",
+        "French" : "fr",
+        "Italian" : "it",
+        "Polish" : "pl",
+        "Russian" : "ru",
+        "Spanish" : "es"
+        };
+
+        process.stdout.write("TopicIntent is running");
 
         let inputPhrase;
         let targetLan;
@@ -43,7 +57,7 @@ const handlers = {
         //const myPrompts = this.t('PROMPTS');
         //const prompt = myPrompts[itemName];
 
-        const lanCode = lanCodes[targetLan];
+        const lanCode = langCodes[targetLan];
         
         rapid.call('GoogleTranslate', 'translateAutomatic', { 
         	'apiKey': 'AIzaSyAfqcbjvhcMMXsN4S8DzXwBXfD8YyuPQjI',
@@ -51,9 +65,11 @@ const handlers = {
         	'targetLanguage': lanCode,
          
         }).on('success', (payload)=>{
+            process.stdout.write("translated");
             callback({},
             buildSpeechletResponse('Translate Demo', `${inputPhrase} in ${targetLan} is ${payload}`, null, false));
         }).on('error', (payload)=>{
+            process.stdout.write("not translated");
             callback({},
             buildSpeechletResponse('Translate Demo', `Sorry, translation not available`, null, false));
         });
