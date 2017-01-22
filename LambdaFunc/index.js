@@ -12,7 +12,7 @@
 
 const Alexa = require('alexa-sdk');
 const lanCodes = require('./languages');
-const RapidAPI = require('./node_modules/rapidapi-connect');
+const RapidAPI = require('./rapidapi-connect');
 const rapid = new RapidAPI("ForeignCompanion", "083e204f-70fe-4969-9c09-ade3f2057ae5");
 
 const APP_ID = undefined; // TODO replace with your app ID (OPTIONAL).
