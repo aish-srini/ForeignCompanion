@@ -11,7 +11,8 @@
 'use strict';
 
 const Alexa = require('alexa-sdk');
-const prompts = require('./prompts');
+const RapidAPI = require('rapidapi-connect');
+const rapid = new RapidAPI("ForeignCompanion", "083e204f-70fe-4969-9c09-ade3f2057ae5");
 
 const APP_ID = undefined; // TODO replace with your app ID (OPTIONAL).
 
@@ -23,12 +24,13 @@ const handlers = {
         this.attributes.repromptSpeech = this.t('WELCOME_REPROMT');
         this.emit(':ask', this.attributes.speechOutput, this.attributes.repromptSpeech);
     },
-    'RecipeIntent': function () {
+    'TopicIntent': function () {
         const input = this.event.request.intent.slots.Phrase;
         const target = this.event.request.intent.slots.Language;
-        const itemSlot = this.event.request.intent.slots.Item;
+
         let inputPhrase;
         let targetLan;
+        
         if (input && input.value) {
             inputPhrase = input.value.toLowerCase();
         }
@@ -40,6 +42,19 @@ const handlers = {
         //const myPrompts = this.t('PROMPTS');
         //const prompt = myPrompts[itemName];
 
+        rapid.call('GoogleTranslate', 'translateAutomatic', { 
+        	'apiKey': 'AIzaSyAfqcbjvhcMMXsN4S8DzXwBXfD8YyuPQjI',
+        	'string': inputPhrase,
+        	'targetLanguage': targetLan,
+         
+        }).on('success', (payload)=>{
+            callback({},
+            buildSpeechletResponse('Translate Demo', `${inputPhrase} in ${targetLan} is ${payload}`, null, false));
+        }).on('error', (payload)=>{
+            callback({},
+            buildSpeechletResponse('Translate Demo', `Sorry, translation not available`, null, false));
+        });
+        
         if (inputPhrase) {
             this.attributes.speechOutput = inputPhrase;
             this.attributes.repromptSpeech = this.t('RECIPE_REPEAT_MESSAGE');
@@ -80,22 +95,6 @@ const handlers = {
 };
 
 const languageStrings = {
-    'en-GB': {
-        translation: {
-            SKILL_NAME: 'Foreign Companion',
-            WELCOME_MESSAGE: "Welcome to %s. You can ask a question like, how do I say hello in Spanish ... Now, what can I help you with.",
-            WELCOME_REPROMT: 'For instructions on what you can say, please say help me.',
-            DISPLAY_CARD_TITLE: '%s  - Recipe for %s.',
-            HELP_MESSAGE: "You can ask questions such as, what\'s the recipe, or, you can say exit...Now, what can I help you with?",
-            HELP_REPROMT: "You can say things like, what\'s the recipe, or you can say exit...Now, what can I help you with?",
-            STOP_MESSAGE: 'Goodbye!',
-            RECIPE_REPEAT_MESSAGE: 'Try saying repeat.',
-            RECIPE_NOT_FOUND_MESSAGE: "I\'m sorry, I currently do not know ",
-            RECIPE_NOT_FOUND_WITH_ITEM_NAME: 'the recipe for %s. ',
-            RECIPE_NOT_FOUND_WITHOUT_ITEM_NAME: 'that recipe. ',
-            RECIPE_NOT_FOUND_REPROMPT: 'What else can I help with?',
-        },
-    },
     'en-US': {
         translation: {
             SKILL_NAME: 'Foreign Companion',
