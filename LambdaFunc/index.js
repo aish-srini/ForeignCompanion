@@ -11,7 +11,8 @@
 'use strict';
 
 const Alexa = require('alexa-sdk');
-const RapidAPI = require('rapidapi-connect');
+const lanCodes = require('./languages');
+const RapidAPI = require('./node_modules/rapidapi-connect');
 const rapid = new RapidAPI("ForeignCompanion", "083e204f-70fe-4969-9c09-ade3f2057ae5");
 
 const APP_ID = undefined; // TODO replace with your app ID (OPTIONAL).
@@ -42,10 +43,12 @@ const handlers = {
         //const myPrompts = this.t('PROMPTS');
         //const prompt = myPrompts[itemName];
 
+        const lanCode = lanCodes[targetLan];
+        
         rapid.call('GoogleTranslate', 'translateAutomatic', { 
         	'apiKey': 'AIzaSyAfqcbjvhcMMXsN4S8DzXwBXfD8YyuPQjI',
         	'string': inputPhrase,
-        	'targetLanguage': targetLan,
+        	'targetLanguage': lanCode,
          
         }).on('success', (payload)=>{
             callback({},
